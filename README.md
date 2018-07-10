@@ -1,6 +1,4 @@
 <h1>Repository for my personal workflow application</h1>
-<br>
-<br>
 This application is not yet named, but I have a few ideas bouncing around in my head:
 <ul>
 	<li>COT (customizable organization tool)</li>
