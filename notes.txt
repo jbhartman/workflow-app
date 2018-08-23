@@ -1,0 +1,6 @@
+180806:
+	As a big picture thing, I'd like to become more familiar with
+	bash and be able to make the application useable from the
+	command line, similar to git and github.  Maybe this is would be
+	something that someone else could help with depending on how
+	things develop with this application.

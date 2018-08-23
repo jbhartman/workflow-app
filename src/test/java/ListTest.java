@@ -1,5 +1,6 @@
 package test.java;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import workflow_app.List;
@@ -284,43 +285,40 @@ class ListTest
 		// insert at beginning of list
 		l0.insert(0, new Task("task0"));
 		assert(l0.get_size() == 4);
-		assert(l0.get_task(0) == new Task("task0"));
-		assert(l0.get_task(1) == new Task("task1"));
-		assert(l0.get_task(2) == new Task("task2"));
-		assert(l0.get_task(3) == new Task("task3"));
+		assert(l0.get_task(0).equals(new Task("task0")));
+		assert(l0.get_task(1).equals(new Task("task1")));
+		assert(l0.get_task(2).equals(new Task("task2")));
+		assert(l0.get_task(3).equals(new Task("task3")));
 		
 		// insert in middle of list
 		l0.insert(2, new Task("task1.5"));
 		assert(l0.get_size() == 5);
-		assert(l0.get_task(0) == new Task("task0"));
-		assert(l0.get_task(1) == new Task("task1"));
-		assert(l0.get_task(2) == new Task("task1.5"));
-		assert(l0.get_task(3) == new Task("task2"));
-		assert(l0.get_task(4) == new Task("task3"));
+		assert(l0.get_task(0).equals(new Task("task0")));
+		assert(l0.get_task(1).equals(new Task("task1")));
+		assert(l0.get_task(2).equals(new Task("task1.5")));
+		assert(l0.get_task(3).equals(new Task("task2")));
+		assert(l0.get_task(4).equals(new Task("task3")));
 		
 		// insert at end of list (should just use append())
 		l0.insert(5, new Task("task4"));
 		assert(l0.get_size() == 6);
-		assert(l0.get_task(0) == new Task("task0"));
-		assert(l0.get_task(1) == new Task("task1"));
-		assert(l0.get_task(2) == new Task("task1.5"));
-		assert(l0.get_task(3) == new Task("task2"));
-		assert(l0.get_task(4) == new Task("task3"));
-		assert(l0.get_task(5) == new Task("task4"));
+		assert(l0.get_task(0).equals(new Task("task0")));
+		assert(l0.get_task(1).equals(new Task("task1")));
+		assert(l0.get_task(2).equals(new Task("task1.5")));
+		assert(l0.get_task(3).equals(new Task("task2")));
+		assert(l0.get_task(4).equals(new Task("task3")));
+		assert(l0.get_task(5).equals(new Task("task4")));
 		
 		// insert way past end of list
 		l0.insert(25, new Task("task5"));
 		assert(l0.get_size() == 7);
-		assert(l0.get_task(0) == new Task("task0"));
-		assert(l0.get_task(1) == new Task("task1"));
-		assert(l0.get_task(2) == new Task("task1.5"));
-		assert(l0.get_task(3) == new Task("task2"));
-		assert(l0.get_task(4) == new Task("task3"));
-		assert(l0.get_task(5) == new Task("task4"));
-		assert(l0.get_task(6) == new Task("task5"));
-		
-		// THROW IN CHECK FOR ADDING TASK WITH SAME TASK DETAILS
-		// TO SAME INDEX
+		assert(l0.get_task(0).equals(new Task("task0")));
+		assert(l0.get_task(1).equals(new Task("task1")));
+		assert(l0.get_task(2).equals(new Task("task1.5")));
+		assert(l0.get_task(3).equals(new Task("task2")));
+		assert(l0.get_task(4).equals(new Task("task3")));
+		assert(l0.get_task(5).equals(new Task("task4")));
+		assert(l0.get_task(6).equals(new Task("task5")));
 	}
 	
 	@Test
@@ -343,9 +341,314 @@ class ListTest
 		}
 	}
 	
-//	@Test
-//	void test_replace() throws ListException
-//	{
-//		
-//	}
+	
+	@Test
+	void test_replace() throws ListException, TaskException
+	{
+		// create list
+		List l0 = new List();
+		
+		// append a few tasks
+		l0.append(new Task("task1"));
+		l0.append(new Task("task2"));
+		l0.append(new Task("task3", 25));
+		
+		// then replace one of the tasks
+		l0.replace(1, new Task("task4"));
+		
+		// check that everything went alright
+		assert(l0.get_size() == 3);
+		assert(l0.get_task(0).equals(new Task("task1")));
+		assert(l0.get_task(1).equals(new Task("task4")));
+		assert(l0.get_task(2).equals(new Task("task3", 25)));
+		
+		// now replace w/ sth else at that same index
+		l0.replace(1, new Task("task5", 25));
+		
+		// check that everything went alright
+		assert(l0.get_size() == 3);
+		assert(l0.get_task(0).equals(new Task("task1")));
+		assert(l0.get_task(1).equals(new Task("task5", 25)));
+		assert(l0.get_task(2).equals(new Task("task3", 25)));
+		
+		// replace at different index w/ identical task at that index
+		l0.replace(2, new Task("task3", 25));
+		
+		// check that everything went alright
+		assert(l0.get_size() == 3);
+		assert(l0.get_task(0).equals(new Task("task1")));
+		assert(l0.get_task(1).equals(new Task("task5", 25)));
+		assert(l0.get_task(2).equals(new Task("task3", 25)));
+	}
+	
+	@Test
+	void test_replace_error_handling()
+			throws ListException, TaskException
+	{
+		// create list
+		List l0 = new List();
+		
+		// append a few tasks
+		l0.append(new Task("task1"));
+		l0.append(new Task("task2", 5));
+		
+		// try to replace with preexisting task
+		// catch error
+		// check that nothing changed
+		try
+		{
+			l0.replace(1, new Task("task1"));
+		}
+		catch(ListException le)
+		{
+			assert(le.get_error_src() == "replace(index, replacement)");
+			assert(l0.get_size() == 2);
+			assert(l0.get_task(0).equals(new Task("task1")));
+			assert(l0.get_task(1).equals(new Task("task2", 5)));
+		}
+		
+		// try to replace with task with details equivalent to
+		// some preexisting task's details
+		// catch error
+		// check that nothing changed
+		try
+		{
+			l0.replace(0, new Task("task2", 2));
+		}
+		catch(ListException le)
+		{
+			assert(le.get_error_src() == "replace(index, replacement)");
+			assert(l0.get_size() == 2);
+			assert(l0.get_task(0).equals(new Task("task1")));
+			assert(l0.get_task(1).equals(new Task("task2", 5)));
+		}
+	}
+	
+	@Test
+	void test_remove_by_task()
+			throws ListException, TaskException
+	{
+		// create list
+		List l0 = new List();
+		
+		// append a few tasks
+		l0.append(new Task("task1"));
+		l0.append(new Task("task2", 4));
+		l0.append(new Task("task3", 5));
+		
+		Task temp_task = new Task("task3");
+		
+		// remove by "new Task("...")"
+		Task placeholder = l0.remove(new Task("task2"));
+		
+		// check that everything went alright
+		assert(l0.get_size() == 2);
+		assert(placeholder.equals(new Task("task2", 4)));
+		assert(l0.get_task(0).equals(new Task("task1")));
+		assert(l0.get_task(1).equals(new Task("task3", 5)));
+		
+		// remove by Task instance identifier
+		placeholder = l0.remove(temp_task);
+		
+		// check that everything went alright
+		assert(l0.get_size() == 1);
+		assert(placeholder.equal_details(temp_task));
+		assert(placeholder.get_user() == 5);
+		assert(l0.get_task(0).equals(new Task("task1")));
+	}
+	
+	@Test
+	void test_remove_by_task_error_handling()
+			throws ListException, TaskException
+	{
+		// create list
+		List l0 = new List();
+		
+		// append some tasks
+		l0.append(new Task("task1"));
+		l0.append(new Task("task2"));
+		l0.append(new Task("task3"));
+		
+		// create task instance which is not in list
+		Task temp_task = new Task("task4");
+		
+		// try to remove nonexistent task
+		// catch exception
+		// check that nothing changed
+		try
+		{
+			l0.remove(temp_task);
+			System.err.println("remove(removed_task) worked for nonexistent task.");
+		}
+		catch(ListException le)
+		{
+			assert(le.get_error_src() == "remove(Task)");
+			assert(l0.get_task(0).equals(new Task("task1")));
+			assert(l0.get_task(0).equals(new Task("task2")));
+			assert(l0.get_task(0).equals(new Task("task3")));
+		}
+		
+		// try to remove based on created task instance
+		// catch exception
+		// check that nothing changed
+		try
+		{
+			l0.remove(new Task("tak1"));
+			System.err.println("remove(removed_task) worked for nonexistent task.");
+		}
+		catch(ListException le)
+		{
+			assert(le.get_error_src() == "remove(Task)");
+			assert(l0.get_task(0).equals(new Task("task1")));
+			assert(l0.get_task(0).equals(new Task("task2")));
+			assert(l0.get_task(0).equals(new Task("task3")));
+		}
+	}
+	
+	@Test
+	void test_remove_by_index() throws ListException
+	{
+		fail();
+		
+		// create a list
+		// append some tasks
+		// create an int instance representing the index
+		// within the bounds of the list
+		// remove with that variable as argument
+		// check that everything went alright
+		// remove with given int, say 0
+		// check that everything went alright
+	}
+	
+	@Test
+	void test_remove_by_index_error_handling() 
+			throws ListException, TaskException
+	{
+		// create a list
+		List l0 = new List();
+		
+		// append some tasks
+		for(int idx=0; idx < 3; idx++)
+		{
+			l0.append(new Task("task" + Integer.toString(idx)));
+		}
+		
+		// create an int instance outside the bounds of the list
+		int invalid_index = 3;
+		
+		// try to remove with that instance as an argument
+		// catch exception
+		// check that nothing changed
+		try
+		{
+			l0.remove(invalid_index);
+			System.err.println("remove(index) successfully removed past end of List.");
+		}
+		catch(ListException le)
+		{
+			assert(le.get_error_src() == "remove(index)");
+			for(int idx=0; idx < 3; idx++)
+			{
+				assert(l0.get_task(idx).equals(new
+						Task("task" + Integer.toString(idx) ) ) );
+			}
+		}
+		
+		// try to remove with int input as instance
+		// catch exception
+		// check that nothing changed
+		try
+		{
+			l0.remove(-1);
+			System.err.println("remove(index) successfully removed past end of List.");
+		}
+		catch(ListException le)
+		{
+			assert(le.get_error_src() == "remove(index)");
+			for(int idx=0; idx < 3; idx++)
+			{
+				assert(l0.get_task(idx).equals(new
+						Task("task" + Integer.toString(idx) ) ) );
+			}
+		}
+	}
+	
+	@Test
+	void test_transfer_task() throws ListException
+	{
+		fail();
+		
+		// Ways to transfer by task (not index):
+		// - With identical task instance variable
+		// - With task instance variable with identical details
+		//     but null user number
+		// - With string instance containing same details
+		
+		// create two lists, original_list and transfer_list
+		// append a few tasks to original_list
+		// create a task instance identical to a particular task
+		//   in original_list
+		// create a task instance with details identical to that
+		//   of a particular task in original_list but null user
+		//   number
+		// create a string which is identical to the details of a
+		//   a particular task in original_list
+		// transfer to transfer_list with identical task as arg
+		// check that everything went alright
+		// transfer to transfer_list with task with identical
+		//   details but null user number
+		// check that everything went alright
+		// transfer to transfer_list with string
+		// check that everything went alright
+	}
+	
+	@Test
+	void test_transfer_task_error_handling() throws ListException
+	{
+		fail();
+		
+		// Ways a transfer-by-task can cause errors:
+		// - Passed task, but no such task exists in original list
+		// - Passed task, but task already exists in transfer list
+		// - Passed string, but no task with those details exists
+		//     in original list
+	}
+	
+	@Test
+	void test_transfer_index() throws ListException
+	{
+		fail();
+	}
+	
+	@Test
+	void test_transfer_index_error_handling() throws ListException
+	{
+		fail();
+	}
+	
+	@Test
+	void test_transfer_task_to_index() throws ListException
+	{
+		fail();
+	}
+	
+	@Test
+	void test_transfer_task_to_index_error_handling()
+	throws ListException
+	{
+		fail();
+	}
+	
+	@Test
+	void test_transfer_index_to_index() throws ListException
+	{
+		fail();
+	}
+	
+	@Test
+	void test_transfer_index_to_index_error_handling()
+	throws ListException
+	{
+		fail();
+	}
 }

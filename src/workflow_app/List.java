@@ -8,14 +8,17 @@ import java.util.ArrayList;
  * public Task get_task(index) [done]
  * public void set_name() [done]
  * public void append(Task) [done]
- * public void insert(Task, index) [writing tests]
- * public void replace(new_task, index) []
- * public Task remove(Task) []
- * public Task remove(index) []
- * public void transfer(Task/index, list2) []
+ * public void insert(Task, index) [done]
+ * public void replace(new_task, index) [tests written]
+ * public Task remove(Task) [tests written]
+ * public Task remove(index) [tests written]
+ * public void transfer(Task/index, list2) [writing tests]
  *   -- A method to transfer a task from one list to another
  * public void transfer(index, list2, dest_index) []
  *   -- dest_index stands for "destination_index"
+ * - Might need a method to stage list for graphical display,
+ * 		will know more once closer to such a point and have
+ * 		becomed more acquainted with what's required
  */
 
 /**
@@ -293,7 +296,8 @@ public class List
 	 * already in the list
 	 * 
 	 * @param new_task - a Task
-	 * @throws ListException if the task is already in the list
+	 * @throws ListException if a task with equivalent details to
+	 * that of <tt>new_task</tt> is already in the list
 	 */
 	public void append(Task new_task) throws ListException
 	{
@@ -315,6 +319,17 @@ public class List
 		my_name = new_name;
 	}
 	
+	/**
+	 * Inserts a task at the specified index and shifts any tasks
+	 * previously at that index over one
+	 * 
+	 * @param index - an int, must be greater than or equal to 0
+	 * @param new_task - a Task
+	 * 
+	 * @throws ListException - if <tt>index</tt> is negative or if
+	 * <tt>new_task</tt> has details equivalent to that of any
+	 * task already in the list
+	 */
 	public void insert(int index, Task new_task) throws ListException
 	{
 		if(index < 0)
@@ -328,8 +343,66 @@ public class List
 		}
 		else	// 0 <= index < get_size()
 		{
+			if(is_in_list(new_task))
+			{
+				throw new ListException("insert(index, new_task)",
+						"Tried to insert preexisting task.");
+			}
 			
+			my_tasks.add(index, new_task);
 		}
+	}
+	
+	/**
+	 * Replaces task at specified index with the new task given
+	 * 
+	 * @param index - an int, must be nonnegative
+	 * @param replacement - a Task
+	 * 
+	 * @throws ListException if <tt>index</tt> is negative or if
+	 * the details of <tt>replacement</tt> are equivalent to that
+	 * of a task already in the list
+	 */
+	public void replace(int index, Task replacement) throws ListException
+	{
+		
+	}
+	
+	public Task remove(Task removed_task) throws ListException
+	{
+		return new Task();
+	}
+	
+	public Task remove(int removed_idx) throws ListException
+	{
+		return new Task();
+	}
+	
+	public void transfer(int trans_idx, List dest_list,
+			int dest_idx) throws ListException
+	{
+		
+	}
+	
+	public void transfer(Task trans_idx, List dest_list,
+			int dest_idx) throws ListException
+	{
+		
+	}
+	
+	public void transfer(int trans_idx, List dest_list)
+	throws ListException
+	{
+		// Basically just use transfer with more args, but have
+		// the destination index be the end of the destination
+		// list
+		transfer(trans_idx, dest_list, dest_list.get_size());
+	}
+	
+	public void transfer(Task trans_task, List dest_list)
+	throws ListException
+	{
+		
 	}
 	
 	// This method won't be tested with JUnit as much as I will
@@ -354,9 +427,10 @@ public class List
 		// just a visual test of the toString() method
 		List l0 = new List("Test list");
 		l0.append(new Task("Finish tasklist project"));
-		l0.append(new Task("Find cofounder"));
 		l0.append(new Task("Get funding"));
 		l0.append(new Task("Profit"));
+		
+		l0.insert(1, new Task("Find cofounder"));
 		
 		System.out.println(l0);
 	}
