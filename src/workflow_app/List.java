@@ -12,9 +12,9 @@ import java.util.ArrayList;
  * public void replace(new_task, index) [tests written]
  * public Task remove(Task) [tests written]
  * public Task remove(index) [tests written]
- * public void transfer(Task/index, list2) [writing tests]
+ * public void transfer(Task/index, list2) [tests written]
  *   -- A method to transfer a task from one list to another
- * public void transfer(index, list2, dest_index) []
+ * public void transfer(index, list2, dest_index) [tests written]
  *   -- dest_index stands for "destination_index"
  * - Might need a method to stage list for graphical display,
  * 		will know more once closer to such a point and have
@@ -43,6 +43,9 @@ public class List
 	// Attributes
 	String my_name;
 	ArrayList<Task> my_tasks;
+	// might want an attribute for other lists to which a
+	// given instance is connected to in a project, might
+	// have that contained in a different class
 	
 	/**
 	 * <b>ListException</b> <br>
@@ -199,7 +202,8 @@ public class List
 	 * 
 	 * @see {@link #get_index(Task)}
 	 */
-	public int get_index(String task_details) throws ListException
+	public int get_index(String task_details)
+			throws ListException
 	{
 		if( !is_in_list(new Task(task_details)) )
 		{
@@ -330,7 +334,8 @@ public class List
 	 * <tt>new_task</tt> has details equivalent to that of any
 	 * task already in the list
 	 */
-	public void insert(int index, Task new_task) throws ListException
+	public void insert(int index, Task new_task)
+			throws ListException
 	{
 		if(index < 0)
 		{
@@ -363,7 +368,8 @@ public class List
 	 * the details of <tt>replacement</tt> are equivalent to that
 	 * of a task already in the list
 	 */
-	public void replace(int index, Task replacement) throws ListException
+	public void replace(int index, Task replacement)
+			throws ListException
 	{
 		
 	}
@@ -384,14 +390,20 @@ public class List
 		
 	}
 	
-	public void transfer(Task trans_idx, List dest_list,
+	public void transfer(Task trans_task, List dest_list,
+			int dest_idx) throws ListException
+	{
+		
+	}
+	
+	public void transfer(String task_details, List dest_list,
 			int dest_idx) throws ListException
 	{
 		
 	}
 	
 	public void transfer(int trans_idx, List dest_list)
-	throws ListException
+			throws ListException
 	{
 		// Basically just use transfer with more args, but have
 		// the destination index be the end of the destination
@@ -400,9 +412,16 @@ public class List
 	}
 	
 	public void transfer(Task trans_task, List dest_list)
-	throws ListException
+			throws ListException
 	{
-		
+		transfer(trans_task, dest_list, dest_list.get_size());
+	}
+	
+	public void transfer(String task_details, List dest_list)
+			throws ListException
+	{
+		transfer(task_details, dest_list,
+				dest_list.get_size());
 	}
 	
 	// This method won't be tested with JUnit as much as I will
