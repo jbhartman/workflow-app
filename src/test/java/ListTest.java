@@ -1305,9 +1305,7 @@ class ListTest
 	@Test
 	void test_transfer_index_to_index_error_handling()
 			throws ListException, TaskException
-	{
-		fail();
-		
+	{		
 		// create orig_list and trans_list
 		List orig_list = new List();
 		List trans_list = new List();
