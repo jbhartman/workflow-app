@@ -208,7 +208,7 @@ class ListTest
 		}
 		catch(ListException le)
 		{
-			assert(le.get_error_src() == "get_index(Task)");
+			assert(le.get_error_src() == "get_index(given_task)");
 		}
 	}
 	
@@ -336,14 +336,13 @@ class ListTest
 		{
 			l0.insert(1, new Task("task3"));
 			System.err.println("insert() worked for adding preexisting task to list.");
-			System.exit(1);
+			fail();
 		}
 		catch(ListException le)
 		{
 			assert(le.get_error_src() == "insert(index, new_task)");
 		}
 	}
-	
 	
 	@Test
 	void test_replace() throws ListException, TaskException
@@ -401,6 +400,7 @@ class ListTest
 		try
 		{
 			l0.replace(1, new Task("task1"));
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -417,6 +417,7 @@ class ListTest
 		try
 		{
 			l0.replace(0, new Task("task2", 2));
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -482,13 +483,14 @@ class ListTest
 		{
 			l0.remove(temp_task);
 			System.err.println("remove(removed_task) worked for nonexistent task.");
+			fail();
 		}
 		catch(ListException le)
 		{
-			assert(le.get_error_src() == "remove(Task)");
+			assert(le.get_error_src() == "remove(removed_task)");
 			assert(l0.get_task(0).equals(new Task("task1")));
-			assert(l0.get_task(0).equals(new Task("task2")));
-			assert(l0.get_task(0).equals(new Task("task3")));
+			assert(l0.get_task(1).equals(new Task("task2")));
+			assert(l0.get_task(2).equals(new Task("task3")));
 		}
 		
 		// try to remove based on created task instance
@@ -498,29 +500,53 @@ class ListTest
 		{
 			l0.remove(new Task("tak1"));
 			System.err.println("remove(removed_task) worked for nonexistent task.");
+			fail();
 		}
 		catch(ListException le)
 		{
-			assert(le.get_error_src() == "remove(Task)");
+			assert(le.get_error_src() == "remove(removed_task)");
 			assert(l0.get_task(0).equals(new Task("task1")));
-			assert(l0.get_task(0).equals(new Task("task2")));
-			assert(l0.get_task(0).equals(new Task("task3")));
+			assert(l0.get_task(1).equals(new Task("task2")));
+			assert(l0.get_task(2).equals(new Task("task3")));
 		}
 	}
 	
 	@Test
 	void test_remove_by_index() throws ListException
 	{
-		fail();
-		
 		// create a list
+		List l0 = new List();
+		
 		// append some tasks
+		l0.append(new Task("task1"));
+		l0.append(new Task("task2"));
+		l0.append(new Task("task3"));
+		l0.append(new Task("task4"));
+		
 		// create an int instance representing the index
-		// within the bounds of the list
+		//   within the bounds of the list
+		int int_in_bounds = 2;
+		
 		// remove with that variable as argument
+		Task temp_task = l0.remove(int_in_bounds);
+		
 		// check that everything went alright
+		assert(temp_task.equals(new Task("task3")));
+		
+		assert(l0.get_size() == 3);
+		assert(l0.get_task(0).equals(new Task("task1")));
+		assert(l0.get_task(1).equals(new Task("task2")));
+		assert(l0.get_task(2).equals(new Task("task4")));
+		
 		// remove with given int, say 0
+		temp_task = l0.remove(0);
+		
 		// check that everything went alright
+		assert(temp_task.equals(new Task("task1")));
+		
+		assert(l0.get_size() == 2);
+		assert(l0.get_task(0).equals(new Task("task2")));
+		assert(l0.get_task(1).equals(new Task("task4")));
 	}
 	
 	@Test
@@ -531,10 +557,9 @@ class ListTest
 		List l0 = new List();
 		
 		// append some tasks
-		for(int idx=0; idx < 3; idx++)
-		{
-			l0.append(new Task("task" + Integer.toString(idx)));
-		}
+		l0.append(new Task("task1"));
+		l0.append(new Task("task2"));
+		l0.append(new Task("task3"));
 		
 		// create an int instance outside the bounds of the list
 		int invalid_index = 3;
@@ -545,16 +570,15 @@ class ListTest
 		try
 		{
 			l0.remove(invalid_index);
-			System.err.println("remove(index) successfully removed past end of List.");
+			System.err.println("remove(removed_idx) successfully removed past end of List.");
+			fail();
 		}
 		catch(ListException le)
 		{
-			assert(le.get_error_src() == "remove(index)");
-			for(int idx=0; idx < 3; idx++)
-			{
-				assert(l0.get_task(idx).equals(new
-						Task("task" + Integer.toString(idx) ) ) );
-			}
+			assert(le.get_error_src() == "remove(removed_idx)");
+			assert(l0.get_task(0).equals(new Task("task1")));
+			assert(l0.get_task(1).equals(new Task("task2")));
+			assert(l0.get_task(2).equals(new Task("task3")));
 		}
 		
 		// try to remove with int input as instance
@@ -563,16 +587,15 @@ class ListTest
 		try
 		{
 			l0.remove(-1);
-			System.err.println("remove(index) successfully removed past end of List.");
+			System.err.println("remove(removed_idx) successfully removed past end of List.");
+			fail();
 		}
 		catch(ListException le)
 		{
-			assert(le.get_error_src() == "remove(index)");
-			for(int idx=0; idx < 3; idx++)
-			{
-				assert(l0.get_task(idx).equals(new
-						Task("task" + Integer.toString(idx) ) ) );
-			}
+			assert(le.get_error_src() == "remove(removed_idx)");
+			assert(l0.get_task(0).equals(new Task("task1")));
+			assert(l0.get_task(1).equals(new Task("task2")));
+			assert(l0.get_task(2).equals(new Task("task3")));
 		}
 	}
 	
@@ -690,6 +713,7 @@ class ListTest
 		{
 			orig_list.transfer(uniq_task, trans_list);
 			System.err.println("transfer(trans_task, dest_list) worked for task not in original list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -710,6 +734,7 @@ class ListTest
 		{
 			orig_list.transfer(diff_user_task, trans_list);
 			System.err.println("transfer(trans_task, dest_list) worked for task not in original list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -729,6 +754,7 @@ class ListTest
 		{
 			orig_list.transfer(uniq_str, trans_list);
 			System.err.println("transfer(task_details, dest_list) worked for task not in original list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -746,8 +772,6 @@ class ListTest
 	void test_transfer_index()
 			throws ListException, TaskException
 	{
-		fail();
-		
 		// This one is much simpler than tranferring-by-task.
 		// There's one way to transfer-by-index, and it works
 		// provided the index is not past the end of the list.
@@ -767,8 +791,9 @@ class ListTest
 		int valid_idx = 1;
 		
 		// transfer-by-index with int instance to trans_list
-		// check that everything went alright
 		orig_list.transfer(valid_idx, trans_list);
+
+		// check that everything went alright
 		assert(orig_list.get_size() == 3);
 		assert(trans_list.get_size() == 1);
 		assert(orig_list.get_task(0).equals(new
@@ -779,10 +804,11 @@ class ListTest
 		assert(trans_list.get_task(0).equals(new Task("task2")));
 		
 		// transfer-by-index with new int arg to trans_list
-		// check that everything went alright
 		orig_list.transfer(2, trans_list);
-		assert(orig_list.get_size() == 3);
-		assert(trans_list.get_size() == 1);
+
+		// check that everything went alright
+		assert(orig_list.get_size() == 2);
+		assert(trans_list.get_size() == 2);
 		assert(orig_list.get_task(0).equals(new
 				Task("task1", 1)));
 		assert(orig_list.get_task(1).equals(new
@@ -795,8 +821,6 @@ class ListTest
 	void test_transfer_index_error_handling()
 			throws ListException, TaskException
 	{
-		fail();
-		
 		// Transfer-by-index fails if:
 		//   - Passed index is outside of the bounds of the list
 		//     whether before list (negative index) or past end
@@ -823,6 +847,7 @@ class ListTest
 		{
 			orig_list.transfer(-1, trans_list);
 			System.err.println("transfer(trans_idx, dest_list) worked for a negative index.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -841,6 +866,7 @@ class ListTest
 		{
 			orig_list.transfer(3, trans_list);
 			System.err.println("transfer(trans_idx, dest_list) worked end of the list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1006,6 +1032,7 @@ class ListTest
 		{
 			orig_list.transfer(uniq_task, trans_list, 1);
 			System.err.println("transfer(trans_task, dest_list, dest_idx) worked for nonexistent task.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1037,6 +1064,7 @@ class ListTest
 		{
 			orig_list.transfer(in_trans_task, trans_list, 2);
 			System.err.println("transfer(trans_task, dest_list, dest_idx) worked for task already in dest_list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1067,6 +1095,7 @@ class ListTest
 		{
 			orig_list.transfer(uniq_details, trans_list, 2);
 			System.err.println("transfer(task_details, dest_list, dest_idx) worked for nonexistent task.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1098,6 +1127,7 @@ class ListTest
 		{
 			orig_list.transfer(in_trans_details, trans_list, 2);
 			System.err.println("transfer(task_details, dest_list, dest_idx) worked for task already in trans_list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1128,6 +1158,7 @@ class ListTest
 		{
 			orig_list.transfer(in_orig_task, trans_list, -1);
 			System.err.println("transfer(trans_task, dest_list, dest_idx) worked for negative destination index.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1157,8 +1188,9 @@ class ListTest
 		// check that nothing changed
 		try
 		{
-			orig_list.transfer(in_orig_task, trans_list, 3);
+			orig_list.transfer(in_orig_task, trans_list, 4);
 			System.err.println("transfer(trans_task, dest_list, dest_idx) worked past end of destination list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1190,6 +1222,7 @@ class ListTest
 		{
 			orig_list.transfer(in_orig_details, trans_list, -1);
 			System.err.println("transfer(task_details, dest_list, dest_idx) worked for negative destination index.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1219,8 +1252,9 @@ class ListTest
 		// check that nothing changed
 		try
 		{
-			orig_list.transfer(in_orig_details, trans_list, 3);
+			orig_list.transfer(in_orig_details, trans_list, 4);
 			System.err.println("transfer(task_details, dest_list, dest_idx) worked past end of destination list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1326,6 +1360,7 @@ class ListTest
 		{
 			orig_list.transfer(-2, trans_list, 1);
 			System.err.println("transfer(trans_idx, dest_list, dest_idx) worked for negative original index.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1348,8 +1383,9 @@ class ListTest
 		// check that nothing changed
 		try
 		{
-			orig_list.transfer(2, trans_list, 1);
+			orig_list.transfer(3, trans_list, 1);
 			System.err.println("transfer(trans_idx, dest_list, dest_idx) worked past end of original list.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1374,6 +1410,7 @@ class ListTest
 		{
 			orig_list.transfer(1, trans_list, -1);
 			System.err.println("transfer(trans_idx, dest_list, dest_idx) worked for negative destination index.");
+			fail();
 		}
 		catch(ListException le)
 		{
@@ -1396,8 +1433,9 @@ class ListTest
 		// check that nothing changed
 		try
 		{
-			orig_list.transfer(-2, trans_list, 3);
+			orig_list.transfer(2, trans_list, 4);
 			System.err.println("transfer(trans_idx, dest_list, dest_idx) worked past end of destination index.");
+			fail();
 		}
 		catch(ListException le)
 		{

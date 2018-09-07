@@ -9,9 +9,9 @@ import java.util.ArrayList;
  * public void set_name() [done]
  * public void append(Task) [done]
  * public void insert(Task, index) [done]
- * public void replace(new_task, index) [tests written]
- * public Task remove(Task) [tests written]
- * public Task remove(index) [tests written]
+ * public void replace(new_task, index) [done]
+ * public Task remove(Task) [done]
+ * public Task remove(index) [done]
  * public void transfer(Task/index, list2) [tests written]
  *   -- A method to transfer a task from one list to another
  * public void transfer(index, list2, dest_index) [tests written]
@@ -249,19 +249,23 @@ public class List
 		 */
 		if( !is_in_list(given_task) )
 		{
-			throw new ListException("get_index(Task)", "No task with equivalent details exists in list.");
+			throw new ListException("get_index(given_task)", "No task with equivalent details exists in list.");
 		}
 		
 		int task_idx = get_index(given_task.get_details());
 		
-		if( my_tasks.get(task_idx).get_user()
-				== given_task.get_user())
+		if( given_task.get_user()
+				== my_tasks.get(task_idx).get_user())
+		{
+			return task_idx;
+		}
+		else if( given_task.get_user() == 0)
 		{
 			return task_idx;
 		}
 		else
 		{
-			throw new ListException("get_index(Task)", "There is not task in the list identical to the passed task.");
+			throw new ListException("get_index(given_task)", "There is no task in the list identical to the passed task.");
 		}
 	}
 	
@@ -371,40 +375,198 @@ public class List
 	public void replace(int index, Task replacement)
 			throws ListException
 	{
-		
+		// Although dumb, the method shouldn't fail just because
+		// the "replacement" task is identical to the one at the
+		// given index since it, in essence, is not really
+		// replacing anything.  It's similar to self-assignment:
+		// dumb, but not illegal.  So, this if-statement here
+		// checks that, and if it's not really changing
+		// anything, then the method does nothing.
+		if( !(replacement.equals(get_task(index))) )
+		{
+			if(is_in_list(replacement))
+			{
+				throw new ListException("replace(index, replacement)",
+						"There already exists a task with the same details as the given task argument in list.");
+			}
+			
+			if(index < 0)
+			{
+				throw new ListException("replace(index, replacement)",
+						"replace() cannot accept negative index.");
+			}
+			else if(index >= get_size())
+			{
+				throw new ListException("replace(index, replacement)",
+						"Given index is past end of list.");
+			}
+			
+			// Passed all the argument checks
+			// Free to move forward with replacing
+			
+			remove(index);
+			insert(index, replacement);
+		}
 	}
 	
 	public Task remove(Task removed_task) throws ListException
 	{
-		return new Task();
+		if( !is_in_list(removed_task) )
+		{
+			throw new ListException("remove(removed_task)",
+					"Given task is not in list.");
+		}
+		
+		int task_idx = get_index(removed_task.get_details());
+		
+		return my_tasks.remove(task_idx);
 	}
 	
 	public Task remove(int removed_idx) throws ListException
 	{
-		return new Task();
+		if(removed_idx < 0)
+		{
+			throw new ListException("remove(removed_idx)",
+					"Cannot accept negative index.");
+		}
+		else if(removed_idx >= get_size())
+		{
+			throw new ListException("remove(removed_idx)",
+					"Cannot accept index past end of list.");
+		}
+		
+		Task rm_task = my_tasks.remove(removed_idx);
+		
+		return rm_task;
 	}
 	
 	public void transfer(int trans_idx, List dest_list,
 			int dest_idx) throws ListException
 	{
+		if(trans_idx < 0)
+		{
+			throw new ListException("transfer(trans_idx, dest_list, dest_idx)",
+					"Original index cannot be negative.");
+		}
+		else if(trans_idx >= get_size())
+		{
+			throw new ListException("transfer(trans_idx, dest_list, dest_idx)",
+					"Original index cannot go past end of list.");
+		}
 		
+		if(dest_idx < 0)
+		{
+			throw new ListException("transfer(trans_idx, dest_list, dest_idx)",
+					"Destination index cannot be negative.");
+		}
+		else if(dest_idx > dest_list.get_size())
+		{
+			throw new ListException("transfer(trans_idx, dest_list, dest_idx)",
+					"Destination index cannot go past end of list.");
+		}
+		
+		Task trans_task = remove(trans_idx);
+		
+		// here we check if the transferred task is to be
+		// inserted into the destination list -- that is, if the
+		// destination index is on [0, dest_list.get_size())
+		// -- or if the task is to be appended -- that is, if
+		// the destination index equals dest_list.get_size().
+		if(dest_idx == dest_list.get_size())
+		{
+			dest_list.append(trans_task);
+		}
+		else
+		{
+			dest_list.insert(dest_idx, trans_task);
+		}
 	}
 	
 	public void transfer(Task trans_task, List dest_list,
 			int dest_idx) throws ListException
 	{
+		// throw exception if task not in original list
+		if( !(is_in_list(trans_task)) )
+		{
+			throw new ListException("transfer(trans_task, dest_list, dest_idx)",
+					"Given task is not in original list.");
+		}
 		
+		// throw exception if dest_idx negative
+		if(dest_idx < 0)
+		{
+			throw new ListException("transfer(trans_task, dest_list, dest_idx)",
+					"Destination index cannot be negative.");
+		}
+		
+		// throw exception if dest_idx > dest_list.get_size()
+		if(dest_idx > dest_list.get_size())
+		{
+			throw new ListException("transfer(trans_task, dest_list, dest_idx)",
+					"Destination index cannot go past end of list.");
+		}
+		
+		
+		// get task with same details, then check that user
+		// numbers are equal or that the task given in the
+		// function call has null user number, indicating that
+		// user number is not of interest in this situation
+		int orig_task_idx = get_index(trans_task.get_details());
+		
+		if(trans_task.get_user() == 0 ||
+				trans_task.get_user() ==
+				get_task(orig_task_idx).get_user())
+		{
+			transfer(orig_task_idx, dest_list, dest_idx);
+		}
+		else
+		{
+			throw new ListException("transfer(trans_task, dest_list, dest_idx)",
+					"Task passed as argument has nonnull user number which is not equivalent to the user number of the task in the original list.");
+		}
 	}
 	
 	public void transfer(String task_details, List dest_list,
 			int dest_idx) throws ListException
 	{
+		if( !is_in_list(new Task(task_details)) )
+		{
+			throw new ListException("transfer(task_details, dest_list, dest_idx)",
+					"No task in list matches task details given.");
+		}
 		
+		if(dest_idx < 0)
+		{
+			throw new ListException("transfer(task_details, dest_list, dest_idx)",
+					"Destination index cannot be negative.");
+		}
+		else if(dest_idx > dest_list.get_size())
+		{
+			throw new ListException("transfer(task_details, dest_list, dest_idx)",
+					"Destination index cannot go past end of list.");
+		}
+		
+		int task_idx = get_index(new Task(task_details));
+		transfer(task_idx, dest_list, dest_idx);
 	}
 	
 	public void transfer(int trans_idx, List dest_list)
 			throws ListException
 	{
+		// check for errors here so error source can be more
+		// accurate and not just go to transfer(trans_idx,
+		// dest_list, dest_idx)
+		if(trans_idx < 0)
+		{
+			throw new ListException("transfer(trans_idx, dest_list)",
+					"Original index cannot be negative.");
+		}
+		if(trans_idx >= get_size())
+		{
+			throw new ListException("transfer(trans_idx, dest_list)",
+					"Original index cannot go past end of list.");
+		}
+		
 		// Basically just use transfer with more args, but have
 		// the destination index be the end of the destination
 		// list
@@ -414,12 +576,41 @@ public class List
 	public void transfer(Task trans_task, List dest_list)
 			throws ListException
 	{
-		transfer(trans_task, dest_list, dest_list.get_size());
+		if( !is_in_list(trans_task) )
+		{
+			throw new ListException("transfer(trans_task, dest_list)",
+					"Given task is not in original list.");
+		}
+		
+		// get task with same details, then check that user
+		// numbers are equal or that the task given in the
+		// function call has null user number, indicating that
+		// user number is not of interest in this situation
+		int orig_task_idx = get_index(trans_task.get_details());
+		
+		if(trans_task.get_user() == 0 ||
+				trans_task.get_user() ==
+				get_task(orig_task_idx).get_user())
+		{
+			transfer(trans_task, dest_list, dest_list.get_size());
+
+		}
+		else
+		{
+			throw new ListException("transfer(trans_task, dest_list)",
+					"Task passed as argument has nonnull user number which is not equivalent to the user number of the task in the original list.");
+		}
 	}
 	
 	public void transfer(String task_details, List dest_list)
 			throws ListException
 	{
+		if( !is_in_list(new Task(task_details)) )
+		{
+			throw new ListException("transfer(task_details, dest_list)",
+					"No task in list matches task details given.");
+		}
+		
 		transfer(task_details, dest_list,
 				dest_list.get_size());
 	}
