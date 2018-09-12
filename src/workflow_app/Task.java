@@ -1,8 +1,6 @@
 package workflow_app;
 
 /**
- * <b>Task</b> class <br>
- * <br>
  * Represents a task with my_details spelling out what needs to
  * be done and assigned_user being the person carrying out the
  * task. <br>
@@ -30,7 +28,6 @@ public class Task
 	private int assigned_user;
 	
 	/**
-	 * <b>TaskException</b> <br>
 	 * Exception subclass for exceptions within Task class
 	 * 
 	 * @author Jacob Hartman (jabrhartman@gmail.com)
@@ -42,14 +39,16 @@ public class Task
 		String my_message;
 		
 		/**
-		 * <b>Constructor</b> <br>
-		 * 
 		 * Creates a TaskException instance with the source of the
 		 * exception, where, and the reason for the exception,
 		 * message
 		 * 
-		 * @param where - a String
-		 * @param message -  a String
+		 * @param	where
+		 * 			a String, the method which threw the exception
+		 * 
+		 * @param 	message
+		 * 			a String, the reason for the exception being
+		 * 			thrown
 		 */
 		TaskException(String where, String message)
 		{
@@ -61,7 +60,7 @@ public class Task
 		 * Allows for vailidation in testing of the source of
 		 * the exception
 		 * 
-		 * @return The source of the exception
+		 * @return	The source of the exception
 		 */
 		public String get_error_src()
 		{
@@ -83,12 +82,12 @@ public class Task
 	 * <b>Default constructor</b> <br>
 	 * 
 	 * Instance variables set to default values <br>
-	 * -- my_details set to empty string <br>
-	 * -- assigned_user set to 0
+	 * &mdash; my_details set to empty string <br>
+	 * &mdash; assigned_user set to 0
 	 * 
-	 * @see {@link #Task(String)}, explicit-A constructor <br>
-	 * 		{@link #Task(int)}, explicit-B constructor <br>
-	 * 		{@link #Task(String, int)}, explicit-C constructor <br>
+	 * @see	{@link #Task(String)}, explicit-A constructor
+	 * @see	{@link #Task(int)}, explicit-B constructor
+	 * @see	{@link #Task(String, int)}, explicit-C constructor
 	 */
 	public Task()
 	{
@@ -102,11 +101,12 @@ public class Task
 	 * Initialises task instance with details specified but no
 	 * assigned user
 	 * 
-	 * @param details - a String
+	 * @param	details
+	 * 			a String, the details of the newly created task
 	 * 
-	 * @see {@link #Task()}, default constructor <br>
-	 * 		{@link #Task(int)}, explicit-B constructor <br>
-	 * 		{@link #Task(String, int)}, explicit-C constructor
+	 * @see		{@link #Task()}, default constructor
+	 * @see		{@link #Task(int)}, explicit-B constructor
+	 * @see		{@link #Task(String, int)}, explicit-C constructor
 	 */
 	public Task(String details)
 	{
@@ -119,11 +119,15 @@ public class Task
 	 * 
 	 * Initialises task instance with assigned user but no details
 	 * 
-	 * @param user - an int, must be nonnegative
+	 * @param	user
+	 * 			an int, the user assigned to the task; must be
+	 * 			nonnegative
 	 * 
-	 * @see {@link #Task()}, default constructor <br>
-	 * 		{@link #Task(String)}, explicit-A constructor <br>
-	 * 		{@link #Task(String, int)}, explicit-C constructor
+	 * @throws	TaskException if the user number passed is negative
+	 * 
+	 * @see		{@link #Task()}, default constructor
+	 * @see		{@link #Task(String)}, explicit-A constructor
+	 * @see		{@link #Task(String, int)}, explicit-C constructor
 	 */
 	public Task(int user) throws TaskException
 	{
@@ -142,12 +146,18 @@ public class Task
 	 * Initialises task instance with specific details and assigned
 	 * user
 	 * 
-	 * @param details - a String
-	 * @param user - an int, must be nonnegative
+	 * @param	details
+	 * 			a String, the details of the newly created task
 	 * 
-	 * @see {@link #Task()}, default constructor <br>
-	 * 		{@link #Task(String)}, explicit-A constructor <br>
-	 * 		{@link #Task(int)}, explicit-B constructor
+	 * @param	user
+	 * 			an int, the user assigned to the task; must be
+	 * 			nonnegative
+	 * 
+	 * @throws	TaskException if the user number passed is negative
+	 * 
+	 * @see 	{@link #Task()}, default constructor
+	 * @see		{@link #Task(String)}, explicit-A constructor
+	 * @see		{@link #Task(int)}, explicit-B constructor
 	 */
 	public Task(String details, int user) throws TaskException
 	{
@@ -163,35 +173,52 @@ public class Task
 	/**
 	 * Returns details of the task
 	 * 
-	 * @return details of the task
+	 * @return	details of the task
+	 * 
+	 * @see		{@link #get_user()}
 	 */
 	public String get_details() { return my_details; }
 	
 	/**
 	 * Returns user assigned to the task
 	 * 
-	 * @return user assigned to the task
+	 * @return	user assigned to the task
+	 * 
+	 * @see		{@link #get_details()}
 	 */
 	public int get_user() { return assigned_user; }
 	
 	/**
-	 * Change details of the task
+	 * Change details of the task </br>
 	 * 
-	 * Note: As tasks will nearly always be used in lists, it is
-	 * 		 important to note that we are not concerned with
-	 * 		 exceptions being raised for changing the details to
-	 * 		 being equivalent to that of another task here.  That
-	 * 		 will be handled within the List class in some sort of
-	 * 		 edit() method.
+	 * <b>Note</b>: As tasks will nearly always be used in lists, it
+	 * is important to note that we are not concerned with exceptions
+	 * being raised for changing the details to being equivalent to
+	 * that of another task here.  That is handled within the List
+	 * class by the methods listed in the "see also" section below.
 	 * 
-	 * @param new_details - a String
+	 * @param 	new_details
+	 * 			a String, the new details of the task which replace
+	 * 			the previously held details
+	 * 
+	 * @see		{@link List#append(Task)}
+	 * @see		{@link List#insert(int, Task)}
+	 * @see		{@link List#replace(int, Task)}
+	 * @see		{@link List#transfer(int, List)}
+	 * @see		{@link List#transfer(String, List)}
+	 * @see		{@link List#transfer(Task, List)}
+	 * @see		{@link List#transfer(int, List, int)}
+	 * @see		{@link List#transfer(String, List, int)}
+	 * @see		{@link List#transfer(Task, List, int)}
 	 */
 	public void set_details(String new_details) { my_details = new_details; }
 	
 	/**
 	 * Changes user assigned to the task
 	 * 
-	 * @param new_user - an int, must be nonnegative 
+	 * @param 	new_user
+	 * 			an int, the user number being assigned to the task;
+	 * 			must be nonnegative 
 	 */
 	public void set_user(int new_user) throws TaskException
 	{
@@ -209,13 +236,15 @@ public class Task
 	 * that the <i>details</i> are equivalent, not that the details
 	 * and user assigned to the task are equivalent.
 	 * 
-	 * @param task2 - a Task
-	 * @return A boolean:<br>
-	 * - true, if the tasks have equivalent details <br>
-	 * - false, if the tasks do not have equivalent details
+	 * @param 	task2
+	 * 			a Task, the task whose details are being compared
+	 * 			against the details of <code>this</code>
 	 * 
-	 * @see {@link #not_equal_details(Task)} <br>
-	 * {@link #equals(Task)}
+	 * @return 	<code>true</code> if the details of the two tasks are
+	 * 			equivalent; <code>false</code> otherwise
+	 * 
+	 * @see 	{@link #not_equal_details(Task)}
+	 * @see 	{@link #equals(Task)}
 	 */
 	public boolean equal_details(Task task2)
 	{
@@ -235,15 +264,18 @@ public class Task
 	}
 	
 	/**
-	 * Returns the opposite of equal_details(task2)
+	 * Determines whether two tasks <i>do not</i> have equivalent
+	 * details
 	 * 
-	 * @param task2 - a Task
-	 * @return A boolean <br>
-	 * - true, if the tasks do not have equivalent details <br>
-	 * - false, if the tasks have equivalent details
+	 * @param 	task2
+	 * 			a Task, the task whose details are being compared
+	 * 			against the details of <code>this</code>
 	 * 
-	 * @see {@link #equal_details(Task)} <br>
-	 * {@link #equals(Task)}
+	 * @return	<code>true</code> if the details of the two tasks are
+	 * 			different; <code>false</code> otherwise
+	 * 
+	 * @see		{@link #equal_details(Task)}
+	 * @see		{@link #equals(Task)}
 	 */
 	public boolean not_equal_details(Task task2)
 	{
@@ -257,15 +289,16 @@ public class Task
 	 * {@link #equal_details(Task)} as that method only compares
 	 * the details of the two tasks.
 	 * 
-	 * @param task2 - a Task
-	 * @return A boolean <br>
-	 * - true, if the tasks have equivalent details and assigned
-	 * user
-	 * - false, if the tasks do not have equivalent details and
-	 * assigned user
+	 * @param 	task2
+	 * 			a Task, the task being compared against
+	 * 			<code>this</code>
 	 * 
-	 * @see {@link #equal_details(Task)} <br>
-	 * {@link #not_equal_details(Task)}
+	 * @return 	<code>true</code> if the two tasks have equivalent
+	 * 			details <i>and</i> user numbers; <code>false</code>
+	 * 			otherwise
+	 * 
+	 * @see 	{@link #equal_details(Task)}
+	 * @see		{@link #not_equal_details(Task)}
 	 */
 	public boolean equals(Task task2)
 	{
