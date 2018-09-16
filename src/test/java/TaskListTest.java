@@ -3,14 +3,14 @@ package test.java;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import workflow_app.List;
-import workflow_app.List.ListException;
+import workflow_app.TaskList;
+import workflow_app.TaskList.TaskListException;
 import workflow_app.Task;
 import workflow_app.Task.TaskException;
 
 import java.util.ArrayList;
 
-class ListTest
+class TaskListTest
 {
 	// Need to make this an assertion method
 	// I wrote this method to check that two ArrayList instances
@@ -36,9 +36,9 @@ class ListTest
 	}
 	
 	@Test
-	void test_default_constructor() throws ListException
+	void test_default_constructor() throws TaskListException
 	{
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		assert(l0.get_name() == "");
 		assert(l0.get_size() == 0);
@@ -51,7 +51,7 @@ class ListTest
 	@Test
 	void test_explicit_constructor()
 	{
-		List l0 = new List("testname");
+		TaskList l0 = new TaskList("testname");
 		
 		assert(l0.get_name() == "testname");
 		assert(l0.get_size() == 0);
@@ -62,32 +62,32 @@ class ListTest
 	}
 	
 	@Test
-	void test_copy_constructor() throws ListException
+	void test_copy_constructor() throws TaskListException
 	{
-		List l0 = new List();
-		List l1 = new List("just a name");
-		List l2 = new List("name and tasks");
+		TaskList l0 = new TaskList();
+		TaskList l1 = new TaskList("just a name");
+		TaskList l2 = new TaskList("name and tasks");
 		
 		l2.append(new Task("task1"));
 		l2.append(new Task("task2"));
 		l2.append(new Task("task3"));
 		
-		// copy with empty List
-		List l3 = new List(l0);
+		// copy with empty TaskList
+		TaskList l3 = new TaskList(l0);
 		
 		assert(l3.get_name() == "");
 		assert(l3.get_size() == 0);
 		assertEquals(l3.get_array(), new ArrayList<Task>());
 		
-		// copy with List with name but no tasks
-		List l4 = new List(l1);
+		// copy with TaskList with name but no tasks
+		TaskList l4 = new TaskList(l1);
 		
 		assert(l4.get_name() == "just a name");
 		assert(l4.get_size() == 0);
 		assertEquals(l4.get_array(), new ArrayList<Task>());
 		
-		// copy with List with name and tasks
-		List l5 = new List(l2);
+		// copy with TaskList with name and tasks
+		TaskList l5 = new TaskList(l2);
 		
 		assert(l5.get_name() == "name and tasks");
 		assert(l5.get_size() == 3);
@@ -97,9 +97,9 @@ class ListTest
 	}
 
 	@Test
-	void test_append() throws ListException
+	void test_append() throws TaskListException
 	{
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		l0.append(new Task("task1"));
 		assert(l0.get_size() == 1);
@@ -114,7 +114,7 @@ class ListTest
 		{
 			l0.append(new Task("task1"));
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "append(new_task)");
 			
@@ -126,9 +126,9 @@ class ListTest
 	}
 
 	@Test
-	void test_is_in_list() throws ListException, TaskException
+	void test_is_in_list() throws TaskListException, TaskException
 	{
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		l0.append(new Task("task1"));
 		l0.append(new Task("task2", 68));
 		
@@ -146,9 +146,9 @@ class ListTest
 	}
 
 	@Test
-	void test_get_index_with_string() throws ListException, TaskException
+	void test_get_index_with_string() throws TaskListException, TaskException
 	{
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		l0.append(new Task("task1"));
 		l0.append(new Task("task2", 45));
@@ -170,16 +170,16 @@ class ListTest
 			@SuppressWarnings("unused")
 			int temp_idx = l0.get_index("task4");
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "get_index(String)");
 		}
 	}
 	
 	@Test
-	void test_get_index_with_task() throws ListException, TaskException
+	void test_get_index_with_task() throws TaskListException, TaskException
 	{
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		l0.append(new Task("task1"));
 		l0.append(new Task("task2", 45));
@@ -206,16 +206,16 @@ class ListTest
 			@SuppressWarnings("unused")
 			int temp_idx = l0.get_index(t3);
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "get_index(given_task)");
 		}
 	}
 	
 	@Test
-	void test_get_task() throws ListException, TaskException
+	void test_get_task() throws TaskListException, TaskException
 	{
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		l0.append(new Task("task1", 1));
 		l0.append(new Task("task2", 2));
@@ -228,9 +228,9 @@ class ListTest
 	
 	@Test
 	void test_get_task_error_handling()
-	throws ListException, TaskException
+	throws TaskListException, TaskException
 	{
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		l0.append(new Task("task1", 1));
 		l0.append(new Task("task2", 2));
@@ -243,7 +243,7 @@ class ListTest
 			System.err.println("\"Successfully\" indexed past end of list.");
 			System.exit(1);
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "get_task(index)");
 		}
@@ -255,16 +255,16 @@ class ListTest
 			System.err.println("\"Successfully\" indexed with negative index.");
 			System.exit(1);
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "get_task(index)");
 		}
 	}
 	
 	@Test
-	void test_set_name() throws ListException
+	void test_set_name() throws TaskListException
 	{
-		List l0 = new List("original name");
+		TaskList l0 = new TaskList("original name");
 		l0.set_name("new name");
 		assert(l0.get_name() == "new name");
 		
@@ -278,9 +278,9 @@ class ListTest
 	}
 	
 	@Test
-	void test_insert() throws ListException
+	void test_insert() throws TaskListException
 	{
-		List l0 = new List("yea, I'm naming it l0 again. fight me.");
+		TaskList l0 = new TaskList("yea, I'm naming it l0 again. fight me.");
 		l0.append(new Task("task1"));
 		l0.append(new Task("task2"));
 		l0.append(new Task("task3"));
@@ -325,9 +325,9 @@ class ListTest
 	}
 	
 	@Test
-	void test_insert_error_handling() throws ListException
+	void test_insert_error_handling() throws TaskListException
 	{
-		List l0 = new List("yea, I'm naming it l0 again. fight me.");
+		TaskList l0 = new TaskList("yea, I'm naming it l0 again. fight me.");
 		l0.append(new Task("task1"));
 		l0.append(new Task("task2"));
 		l0.append(new Task("task3"));
@@ -338,17 +338,17 @@ class ListTest
 			System.err.println("insert() worked for adding preexisting task to list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "insert(index, new_task)");
 		}
 	}
 	
 	@Test
-	void test_replace() throws ListException, TaskException
+	void test_replace() throws TaskListException, TaskException
 	{
 		// create list
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		// append a few tasks
 		l0.append(new Task("task1"));
@@ -385,10 +385,10 @@ class ListTest
 	
 	@Test
 	void test_replace_error_handling()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// create list
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		// append a few tasks
 		l0.append(new Task("task1"));
@@ -402,7 +402,7 @@ class ListTest
 			l0.replace(1, new Task("task1"));
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "replace(index, replacement)");
 			assert(l0.get_size() == 2);
@@ -419,7 +419,7 @@ class ListTest
 			l0.replace(0, new Task("task2", 2));
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "replace(index, replacement)");
 			assert(l0.get_size() == 2);
@@ -430,10 +430,10 @@ class ListTest
 	
 	@Test
 	void test_remove_by_task()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// create list
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		// append a few tasks
 		l0.append(new Task("task1"));
@@ -463,10 +463,10 @@ class ListTest
 	
 	@Test
 	void test_remove_by_task_error_handling()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// create list
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		// append some tasks
 		l0.append(new Task("task1"));
@@ -485,7 +485,7 @@ class ListTest
 			System.err.println("remove(removed_task) worked for nonexistent task.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "remove(removed_task)");
 			assert(l0.get_task(0).equals(new Task("task1")));
@@ -502,7 +502,7 @@ class ListTest
 			System.err.println("remove(removed_task) worked for nonexistent task.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "remove(removed_task)");
 			assert(l0.get_task(0).equals(new Task("task1")));
@@ -512,10 +512,10 @@ class ListTest
 	}
 	
 	@Test
-	void test_remove_by_index() throws ListException
+	void test_remove_by_index() throws TaskListException
 	{
 		// create a list
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		// append some tasks
 		l0.append(new Task("task1"));
@@ -551,10 +551,10 @@ class ListTest
 	
 	@Test
 	void test_remove_by_index_error_handling() 
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// create a list
-		List l0 = new List();
+		TaskList l0 = new TaskList();
 		
 		// append some tasks
 		l0.append(new Task("task1"));
@@ -570,10 +570,10 @@ class ListTest
 		try
 		{
 			l0.remove(invalid_index);
-			System.err.println("remove(removed_idx) successfully removed past end of List.");
+			System.err.println("remove(removed_idx) successfully removed past end of list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "remove(removed_idx)");
 			assert(l0.get_task(0).equals(new Task("task1")));
@@ -587,10 +587,10 @@ class ListTest
 		try
 		{
 			l0.remove(-1);
-			System.err.println("remove(removed_idx) successfully removed past end of List.");
+			System.err.println("remove(removed_idx) successfully removed past end of list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "remove(removed_idx)");
 			assert(l0.get_task(0).equals(new Task("task1")));
@@ -601,7 +601,7 @@ class ListTest
 	
 	@Test
 	void test_transfer_task()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// Ways to transfer by task (not index):
 		// - With identical task instance variable
@@ -611,8 +611,8 @@ class ListTest
 		
 		// create two lists, orig_list (original) and trans_list
 		//   (transfer)
-		List orig_list = new List();
-		List trans_list = new List();
+		TaskList orig_list = new TaskList();
+		TaskList trans_list = new TaskList();
 		
 		// append a few tasks to original_list
 		orig_list.append(new Task("task1"));
@@ -678,7 +678,7 @@ class ListTest
 	
 	@Test
 	void test_transfer_task_error_handling()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// Ways a transfer-by-task can cause errors:
 		// - Passed task, but no such task exists in original list
@@ -687,8 +687,8 @@ class ListTest
 		//     in original list
 		
 		// create orig_list and trans_list
-		List orig_list = new List();
-		List trans_list = new List();
+		TaskList orig_list = new TaskList();
+		TaskList trans_list = new TaskList();
 		
 		// append several tasks to orig_list
 		orig_list.append(new Task("task1"));
@@ -715,7 +715,7 @@ class ListTest
 			System.err.println("transfer(trans_task, dest_list) worked for task not in original list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_task, dest_list)");
 			assert(orig_list.get_size() == 3);
@@ -736,7 +736,7 @@ class ListTest
 			System.err.println("transfer(trans_task, dest_list) worked for task not in original list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_task, dest_list)");
 			assert(orig_list.get_size() == 3);
@@ -756,7 +756,7 @@ class ListTest
 			System.err.println("transfer(task_details, dest_list) worked for task not in original list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(task_details, dest_list)");
 			assert(orig_list.get_size() == 3);
@@ -770,15 +770,15 @@ class ListTest
 	
 	@Test
 	void test_transfer_index()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// This one is much simpler than tranferring-by-task.
 		// There's one way to transfer-by-index, and it works
 		// provided the index is not past the end of the list.
 		
 		// create orig_list and trans_list instances
-		List orig_list = new List();
-		List trans_list = new List();
+		TaskList orig_list = new TaskList();
+		TaskList trans_list = new TaskList();
 		
 		// append a few tasks to orig_list
 		orig_list.append(new Task("task1", 1));
@@ -819,7 +819,7 @@ class ListTest
 	
 	@Test
 	void test_transfer_index_error_handling()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// Transfer-by-index fails if:
 		//   - Passed index is outside of the bounds of the list
@@ -829,8 +829,8 @@ class ListTest
 		// think that I'm missing something...
 		
 		// create orig_list and trans_list
-		List orig_list = new List();
-		List trans_list = new List();
+		TaskList orig_list = new TaskList();
+		TaskList trans_list = new TaskList();
 		
 		// append a few tasks to orig_list
 		// I'm not going to bother with any user numbers here
@@ -849,7 +849,7 @@ class ListTest
 			System.err.println("transfer(trans_idx, dest_list) worked for a negative index.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_idx, dest_list)");
 			assert(orig_list.get_size() == 3);
@@ -868,7 +868,7 @@ class ListTest
 			System.err.println("transfer(trans_idx, dest_list) worked end of the list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_idx, dest_list)");
 			assert(orig_list.get_size() == 3);
@@ -881,7 +881,7 @@ class ListTest
 	
 	@Test
 	void test_transfer_task_to_index()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// This is going to be very similar to the test
 		// method for transferring-by-task, but here we're
@@ -889,8 +889,8 @@ class ListTest
 		// that's where the difference will come in.
 		
 		// create orig_list and trans_list
-		List orig_list = new List();
-		List trans_list = new List();
+		TaskList orig_list = new TaskList();
+		TaskList trans_list = new TaskList();
 		
 		// append some tasks to orig_list
 		orig_list.append(new Task("task1", 1));
@@ -978,7 +978,7 @@ class ListTest
 	
 	@Test
 	void test_transfer_task_to_index_error_handling()
-	throws ListException, TaskException
+	throws TaskListException, TaskException
 	{
 		// Ways transferring-by-task to specifed index can fail:
 		//   - Passed task not existent in original list
@@ -986,8 +986,8 @@ class ListTest
 		//     past the end of the destination list
 		
 		// create orig_list and trans_list
-		List orig_list = new List();
-		List trans_list = new List();
+		TaskList orig_list = new TaskList();
+		TaskList trans_list = new TaskList();
 		
 		// append a few tasks to orig_list and trans_list
 		orig_list.append(new Task("task1"));
@@ -1034,7 +1034,7 @@ class ListTest
 			System.err.println("transfer(trans_task, dest_list, dest_idx) worked for nonexistent task.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_task, dest_list, dest_idx)");
 			
@@ -1066,7 +1066,7 @@ class ListTest
 			System.err.println("transfer(trans_task, dest_list, dest_idx) worked for task already in dest_list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_task, dest_list, dest_idx)");
 			
@@ -1097,7 +1097,7 @@ class ListTest
 			System.err.println("transfer(task_details, dest_list, dest_idx) worked for nonexistent task.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(task_details, dest_list, dest_idx)");
 			
@@ -1129,7 +1129,7 @@ class ListTest
 			System.err.println("transfer(task_details, dest_list, dest_idx) worked for task already in trans_list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(task_details, dest_list, dest_idx)");
 			
@@ -1160,7 +1160,7 @@ class ListTest
 			System.err.println("transfer(trans_task, dest_list, dest_idx) worked for negative destination index.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_task, dest_list, dest_idx)");
 			
@@ -1192,7 +1192,7 @@ class ListTest
 			System.err.println("transfer(trans_task, dest_list, dest_idx) worked past end of destination list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_task, dest_list, dest_idx)");
 			
@@ -1224,7 +1224,7 @@ class ListTest
 			System.err.println("transfer(task_details, dest_list, dest_idx) worked for negative destination index.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(task_details, dest_list, dest_idx)");
 			
@@ -1256,7 +1256,7 @@ class ListTest
 			System.err.println("transfer(task_details, dest_list, dest_idx) worked past end of destination list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(task_details, dest_list, dest_idx)");
 			
@@ -1281,7 +1281,7 @@ class ListTest
 	
 	@Test
 	void test_transfer_index_to_index()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{
 		// Just as with transferring w/o destination index,
 		// here, there's really only one way that transferring-
@@ -1290,8 +1290,8 @@ class ListTest
 		// transferring-by-task-to-index.
 		
 		// create orig_list and trans_list
-		List orig_list = new List();
-		List trans_list = new List();
+		TaskList orig_list = new TaskList();
+		TaskList trans_list = new TaskList();
 		
 		// append a few tasks to orig_list
 		orig_list.append(new Task("task1"));
@@ -1338,11 +1338,11 @@ class ListTest
 	
 	@Test
 	void test_transfer_index_to_index_error_handling()
-			throws ListException, TaskException
+			throws TaskListException, TaskException
 	{		
 		// create orig_list and trans_list
-		List orig_list = new List();
-		List trans_list = new List();
+		TaskList orig_list = new TaskList();
+		TaskList trans_list = new TaskList();
 		
 		// append some tasks to orig_list and trans_list
 		orig_list.append(new Task("task1"));
@@ -1362,7 +1362,7 @@ class ListTest
 			System.err.println("transfer(trans_idx, dest_list, dest_idx) worked for negative original index.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_idx, dest_list, dest_idx)");
 			
@@ -1387,7 +1387,7 @@ class ListTest
 			System.err.println("transfer(trans_idx, dest_list, dest_idx) worked past end of original list.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_idx, dest_list, dest_idx)");
 			
@@ -1412,7 +1412,7 @@ class ListTest
 			System.err.println("transfer(trans_idx, dest_list, dest_idx) worked for negative destination index.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_idx, dest_list, dest_idx)");
 			
@@ -1437,7 +1437,7 @@ class ListTest
 			System.err.println("transfer(trans_idx, dest_list, dest_idx) worked past end of destination index.");
 			fail();
 		}
-		catch(ListException le)
+		catch(TaskListException le)
 		{
 			assert(le.get_error_src() == "transfer(trans_idx, dest_list, dest_idx)");
 			

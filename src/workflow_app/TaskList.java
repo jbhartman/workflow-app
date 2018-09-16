@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Container class holding Tasks.  It has various methods to act
  * upon itself which will be a bulk of the user-facing
- * functionalities are contained within this class as the List
+ * functionalities are contained within this class as the TaskList
  * class will be (at least what I'm imagining right now) the bulk
  * of the tech at least under the hood.  I'm sure there'll still be
  * quite a bit left graphically. <br>
@@ -36,7 +36,7 @@ import java.util.ArrayList;
  * @see			{@link Task}
  *
  */
-public class List
+public class TaskList
 {
 	// Attributes
 	String my_name;
@@ -47,16 +47,16 @@ public class List
 	
 	/**
 	 * Extension of Exception to handle exceptions pertaining
-	 * to the List class
+	 * to the TaskList class
 	 */
 	@SuppressWarnings("serial")
-	public class ListException extends Exception
+	public class TaskListException extends Exception
 	{
 		String my_location;
 		String my_message;
 		
 		/**
-		 * Creates a ListException instance with the source of the
+		 * Creates a TaskListException instance with the source of the
 		 * exception, where, and the reason for the exception,
 		 * message
 		 * 
@@ -67,7 +67,7 @@ public class List
 		 * 			a String, the reason for the exception being
 		 * 			thrown
 		 */
-		ListException(String where, String message)
+		TaskListException(String where, String message)
 		{
 			my_location = where;
 			my_message = message;
@@ -86,7 +86,7 @@ public class List
 		
 		public String toString()
 		{
-			return "List::" + my_location +
+			return "TaskList::" + my_location +
 					": " + my_message;
 		}
 	}
@@ -98,10 +98,10 @@ public class List
 	 * &mdash; my_name gets empty string<br>
 	 * &mdash; my_tasks gets empty <code>ArrayList&lt;Task></code>
 	 * 
-	 * @see 	{@link #List(String)}, explicit constructor
-	 * @see 	{@link #List(List)}, copy constructor
+	 * @see 	{@link #TaskList(String)}, explicit constructor
+	 * @see 	{@link #TaskList(TaskList)}, copy constructor
 	 */
-	public List()
+	public TaskList()
 	{
 		my_name = "";
 		my_tasks = new ArrayList<Task>();
@@ -115,10 +115,10 @@ public class List
 	 * @param 	name
 	 * 			a String, the name of the list
 	 * 
-	 * @see 	{@link #List()}, default constructor
-	 * @see 	{@link #List(List)}, copy constructor
+	 * @see 	{@link #TaskList()}, default constructor
+	 * @see 	{@link #TaskList(TaskList)}, copy constructor
 	 */
-	public List(String name)
+	public TaskList(String name)
 	{
 		my_name = name;
 		my_tasks = new ArrayList<Task>();
@@ -126,16 +126,16 @@ public class List
 	
 	/**
 	 * <b>Copy constructor</b> <br>
-	 * Creates a new List instance which is a copy the given
+	 * Creates a new TaskList instance which is a copy the given
 	 * original list
 	 * 
 	 * @param 	original
-	 * 			a List, the list being copied
+	 * 			a TaskList, the list being copied
 	 * 
-	 * @see 	{@link #List()}, default constructor
-	 * @see 	{@link #List(String)}, explicit constructor
+	 * @see 	{@link #TaskList()}, default constructor
+	 * @see 	{@link #TaskList(String)}, explicit constructor
 	 */
-	public List(List original)
+	public TaskList(TaskList original)
 	{
 		my_name = original.my_name;
 		my_tasks = new ArrayList<Task>();
@@ -171,13 +171,13 @@ public class List
 	
 	/**
 	 * Returns the <code>ArrayList&lt;Task></code> which contains the
-	 * tasks for the List instance. <br><br>
+	 * tasks for the TaskList instance. <br><br>
 	 * <b>Note</b>: This method is public but will only be so while
 	 * testing is ongoing.
 	 * 
 	 * @return 	my_tasks
 	 * 			an <code>ArrayList&lt;Task></code>, the list of tasks
-	 * 			contained within the List instance
+	 * 			contained within the TaskList instance
 	 */
 	public ArrayList<Task> get_array() { return my_tasks; }
 
@@ -217,18 +217,18 @@ public class List
 	 * @return 	Index of the Task with details equivalent to the
 	 * 		   	string passed as the argument
 	 * 
-	 * @throws 	ListException if a task with details equivalent to
+	 * @throws 	TaskListException if a task with details equivalent to
 	 * 		   	the string argument <code>task_details</code> is not
 	 * 		   	found in the list
 	 * 
 	 * @see 	{@link #get_index(Task)}
 	 */
 	public int get_index(String task_details)
-			throws ListException
+			throws TaskListException
 	{
 		if( !is_in_list(new Task(task_details)) )
 		{
-			throw new ListException("get_index(String)", "No task exists in the list with the given details.");
+			throw new TaskListException("get_index(String)", "No task exists in the list with the given details.");
 		}
 		
 		int task_idx = 0;
@@ -248,7 +248,7 @@ public class List
 	/**
 	 * Provided a task equivalent to that of the passed argument
 	 * exists in the list, the method returns the index of that
-	 * task.  Otherwise, throws a <code>ListException</code>
+	 * task.  Otherwise, throws a <code>TaskListException</code>
 	 * 
 	 * @param 	given_task
 	 * 			a Task, whose index is returned by the method
@@ -256,12 +256,12 @@ public class List
 	 * @return 	Index of the task equivalent to the passed task
 	 * 		   	argument
 	 * 
-	 * @throws 	ListException if equivalent task does not exist in
+	 * @throws 	TaskListException if equivalent task does not exist in
 	 * 		   	the list
 	 * 
 	 * @see 	{@link get_index(String)}
 	 */
-	public int get_index(Task given_task) throws ListException
+	public int get_index(Task given_task) throws TaskListException
 	{
 		/*
 		 * This if-loop only determines if a Task with the same
@@ -271,7 +271,7 @@ public class List
 		 */
 		if( !is_in_list(given_task) )
 		{
-			throw new ListException("get_index(given_task)", "No task with equivalent details exists in list.");
+			throw new TaskListException("get_index(given_task)", "No task with equivalent details exists in list.");
 		}
 		
 		int task_idx = get_index(given_task.get_details());
@@ -287,12 +287,12 @@ public class List
 		}
 		else
 		{
-			throw new ListException("get_index(given_task)", "There is no task in the list identical to the passed task.");
+			throw new TaskListException("get_index(given_task)", "There is no task in the list identical to the passed task.");
 		}
 	}
 	
 	/**
-	 * Returns task at the index given.  Throws ListException if
+	 * Returns task at the index given.  Throws TaskListException if
 	 * the given index is out of range.
 	 * 
 	 * @param	index
@@ -300,18 +300,18 @@ public class List
 	 * 
 	 * @return	Task at the index of <code>index</code> in the list
 	 * 
-	 * @throws	ListException if <code>index</code> is negative or
+	 * @throws	TaskListException if <code>index</code> is negative or
 	 * 			past the end of the list
 	 */
-	public Task get_task(int index) throws ListException
+	public Task get_task(int index) throws TaskListException
 	{
 		if(index >= get_size())
 		{
-			throw new ListException("get_task(index)", "Trying to index past end of list.");
+			throw new TaskListException("get_task(index)", "Trying to index past end of list.");
 		}
 		else if(index < 0)
 		{
-			throw new ListException("get_task(index)", "Given index is negative.");
+			throw new TaskListException("get_task(index)", "Given index is negative.");
 		}
 		
 		return my_tasks.get(index);
@@ -329,21 +329,21 @@ public class List
 	 * @param	new_task
 	 * 			a Task, the task being appended to the list
 	 * 
-	 * @throws	ListException if a task with equivalent details to
+	 * @throws	TaskListException if a task with equivalent details to
 	 * 			that of <code>new_task</code> is already in the list
 	 */
-	public void append(Task new_task) throws ListException
+	public void append(Task new_task) throws TaskListException
 	{
 		if(is_in_list(new_task))
 		{
-			throw new ListException("append(new_task)", "Given task is already in the list.");
+			throw new TaskListException("append(new_task)", "Given task is already in the list.");
 		}
 		
 		my_tasks.add(new_task);
 	}
 	
 	/**
-	 * Changes name of List instance to the given String
+	 * Changes name of TaskList instance to the given String
 	 * 
 	 * @param	new_name
 	 * 			a String, the new name of the list
@@ -367,18 +367,18 @@ public class List
 	 * 			a Task, the task being inserted to the list; must have
 	 * 			details unique to the list, that is, no other task in
 	 * 			the list may have details equivalent to this task's
-	 * 			details, else a ListException is thrown.
+	 * 			details, else a TaskListException is thrown.
 	 * 
-	 * @throws	ListException if <code>index</code> is negative or if
-	 * 			<code>new_task</code> has details equivalent to that
-	 * 			of any task already in the list
+	 * @throws	TaskListException if <code>index</code> is negative or
+	 * 			if <code>new_task</code> has details equivalent to
+	 * 			that of any task already in the list
 	 */
 	public void insert(int index, Task new_task)
-			throws ListException
+			throws TaskListException
 	{
 		if(index < 0)
 		{
-			throw new ListException("insert(index, new_task)",
+			throw new TaskListException("insert(index, new_task)",
 					"Given index must be greater than zero.");
 		}
 		else if(index >= get_size())
@@ -389,7 +389,7 @@ public class List
 		{
 			if(is_in_list(new_task))
 			{
-				throw new ListException("insert(index, new_task)",
+				throw new TaskListException("insert(index, new_task)",
 						"Tried to insert preexisting task.");
 			}
 			
@@ -408,9 +408,9 @@ public class List
 	 * @param 	replacement
 	 * 			a Task, the new task which is replacing the old task
 	 * 			at <code>index</code>; must have details unique to the
-	 * 			list, else a ListException is thrown
+	 * 			list, else a TaskListException is thrown
 	 * 
-	 * @throws	ListException if <code>index</code> is negative or
+	 * @throws	TaskListException if <code>index</code> is negative or
 	 * 			past the end of the list or if the details of
 	 * 			<code>replacement</code> are equivalent to that of a
 	 * 			task already in the list
@@ -419,7 +419,7 @@ public class List
 	 * @see 	{@link #insert(int, Task)}
 	 */
 	public void replace(int index, Task replacement)
-			throws ListException
+			throws TaskListException
 	{
 		// Although dumb, the method shouldn't fail just because
 		// the "replacement" task is identical to the one at the
@@ -432,18 +432,18 @@ public class List
 		{
 			if(is_in_list(replacement))
 			{
-				throw new ListException("replace(index, replacement)",
+				throw new TaskListException("replace(index, replacement)",
 						"There already exists a task with the same details as the given task argument in list.");
 			}
 			
 			if(index < 0)
 			{
-				throw new ListException("replace(index, replacement)",
+				throw new TaskListException("replace(index, replacement)",
 						"replace() cannot accept negative index.");
 			}
 			else if(index >= get_size())
 			{
-				throw new ListException("replace(index, replacement)",
+				throw new TaskListException("replace(index, replacement)",
 						"Given index is past end of list.");
 			}
 			
@@ -468,20 +468,20 @@ public class List
 	 * 
 	 * @param	removed_task
 	 * 			a Task, the task being removed; must be in the list,
-	 *			else a ListException is thrown
+	 *			else a TaskListException is thrown
 	 * 
 	 * @return 	The removed task
 	 * 
-	 * @throws 	ListException if the task given in the function call
-	 * 			is not in the list
+	 * @throws 	TaskListException if the task given in the function
+	 * 			call is not in the list
 	 * 
 	 * @see 	{@link #remove(int)}
 	 */
-	public Task remove(Task removed_task) throws ListException
+	public Task remove(Task removed_task) throws TaskListException
 	{
 		if( !is_in_list(removed_task) )
 		{
-			throw new ListException("remove(removed_task)",
+			throw new TaskListException("remove(removed_task)",
 					"Given task is not in list.");
 		}
 		
@@ -501,21 +501,21 @@ public class List
 	 * 
 	 * @return 	The task removed from the index given
 	 * 
-	 * @throws 	ListException if the index given is negative or past
-	 * 			the end of the list
+	 * @throws 	TaskListException if the index given is negative or
+	 * 			past the end of the list
 	 * 
 	 * @see 	{@link #remove(Task)}
 	 */
-	public Task remove(int removed_idx) throws ListException
+	public Task remove(int removed_idx) throws TaskListException
 	{
 		if(removed_idx < 0)
 		{
-			throw new ListException("remove(removed_idx)",
+			throw new TaskListException("remove(removed_idx)",
 					"Cannot accept negative index.");
 		}
 		else if(removed_idx >= get_size())
 		{
-			throw new ListException("remove(removed_idx)",
+			throw new TaskListException("remove(removed_idx)",
 					"Cannot accept index past end of list.");
 		}
 		
@@ -536,8 +536,8 @@ public class List
 	 * 			than the length of the original list
 	 * 
 	 * @param	dest_list
-	 * 			a List, the list to which the task in question will be
-	 * 			transferred
+	 * 			a TaskList, the list to which the task in question is
+	 * 			being transferred
 	 * 
 	 * @param 	dest_idx
 	 * 			an int, the index in the destination list to which the
@@ -553,7 +553,7 @@ public class List
 	 * 			opting instead to simply add the task to the end of
 	 * 			<code>trans_list</code>.
 	 * 
-	 * @throws 	ListException if either <code>trans_idx</code> or
+	 * @throws 	TaskListException if either <code>trans_idx</code> or
 	 * 			<code>dest_idx</code> are negative,
 	 * 			<code>trans_idx</code> is greater than or equal to the
 	 * 			size of the original list &mdash; which would put it
@@ -561,34 +561,34 @@ public class List
 	 * 			<code>trans_idx</code> is greater than the size of
 	 * 			<code>trans_list</code>
 	 * 
-	 * @see 	{@link #transfer(Task, List, int)}
-	 * @see 	{@link #transfer(String, List, int)}
-	 * @see 	{@link #transfer(int, List)}
-	 * @see 	{@link #transfer(Task, List)}
-	 * @see 	{@link #transfer(String, List)}
+	 * @see 	{@link #transfer(Task, TaskList, int)}
+	 * @see 	{@link #transfer(String, TaskList, int)}
+	 * @see 	{@link #transfer(int, TaskList)}
+	 * @see 	{@link #transfer(Task, TaskList)}
+	 * @see 	{@link #transfer(String, TaskList)}
 	 */
-	public void transfer(int trans_idx, List dest_list,
-			int dest_idx) throws ListException
+	public void transfer(int trans_idx, TaskList dest_list,
+			int dest_idx) throws TaskListException
 	{
 		if(trans_idx < 0)
 		{
-			throw new ListException("transfer(trans_idx, dest_list, dest_idx)",
+			throw new TaskListException("transfer(trans_idx, dest_list, dest_idx)",
 					"Original index cannot be negative.");
 		}
 		else if(trans_idx >= get_size())
 		{
-			throw new ListException("transfer(trans_idx, dest_list, dest_idx)",
+			throw new TaskListException("transfer(trans_idx, dest_list, dest_idx)",
 					"Original index cannot go past end of list.");
 		}
 		
 		if(dest_idx < 0)
 		{
-			throw new ListException("transfer(trans_idx, dest_list, dest_idx)",
+			throw new TaskListException("transfer(trans_idx, dest_list, dest_idx)",
 					"Destination index cannot be negative.");
 		}
 		else if(dest_idx > dest_list.get_size())
 		{
-			throw new ListException("transfer(trans_idx, dest_list, dest_idx)",
+			throw new TaskListException("transfer(trans_idx, dest_list, dest_idx)",
 					"Destination index cannot go past end of list.");
 		}
 		
@@ -618,7 +618,7 @@ public class List
 	 * 			must be a task contained in the original list
 	 * 
 	 * @param 	dest_list
-	 * 			a List, the list to which the task in
+	 * 			a TaskList, the list to which the task in
 	 * 			question will be transferred
 	 * 
 	 * @param	dest_idx
@@ -636,39 +636,39 @@ public class List
 	 * 			opting instead to simply add the task to the end of
 	 * 			<code>trans_list</code>.
 	 * 
-	 * @throws	ListException if the given task is not in the
+	 * @throws	TaskListException if the given task is not in the
 	 * 			original list, or if the destination index is
 	 * 			negative or greater than the size of
 	 * 			<code>dest_list</code>.
 	 * 
-	 * @see		{@link #transfer(int, List, int)}
-	 * @see 	{@link #transfer(String, List, int)}
-	 * @see 	{@link #transfer(Task, List)}
-	 * @see 	{@link #transfer(int, List)}
-	 * @see 	{@link #transfer(String, List)}
+	 * @see		{@link #transfer(int, TaskList, int)}
+	 * @see 	{@link #transfer(String, TaskList, int)}
+	 * @see 	{@link #transfer(Task, TaskList)}
+	 * @see 	{@link #transfer(int, TaskList)}
+	 * @see 	{@link #transfer(String, TaskList)}
 	 */
 	
-	public void transfer(Task trans_task, List dest_list,
-			int dest_idx) throws ListException
+	public void transfer(Task trans_task, TaskList dest_list,
+			int dest_idx) throws TaskListException
 	{
 		// throw exception if task not in original list
 		if( !(is_in_list(trans_task)) )
 		{
-			throw new ListException("transfer(trans_task, dest_list, dest_idx)",
+			throw new TaskListException("transfer(trans_task, dest_list, dest_idx)",
 					"Given task is not in original list.");
 		}
 		
 		// throw exception if dest_idx negative
 		if(dest_idx < 0)
 		{
-			throw new ListException("transfer(trans_task, dest_list, dest_idx)",
+			throw new TaskListException("transfer(trans_task, dest_list, dest_idx)",
 					"Destination index cannot be negative.");
 		}
 		
 		// throw exception if dest_idx > dest_list.get_size()
 		if(dest_idx > dest_list.get_size())
 		{
-			throw new ListException("transfer(trans_task, dest_list, dest_idx)",
+			throw new TaskListException("transfer(trans_task, dest_list, dest_idx)",
 					"Destination index cannot go past end of list.");
 		}
 		
@@ -687,7 +687,7 @@ public class List
 		}
 		else
 		{
-			throw new ListException("transfer(trans_task, dest_list, dest_idx)",
+			throw new TaskListException("transfer(trans_task, dest_list, dest_idx)",
 					"Task passed as argument has nonnull user number which is not equivalent to the user number of the task in the original list.");
 		}
 	}
@@ -704,7 +704,7 @@ public class List
 	 * 			transferring to the destination list
 	 * 
 	 * @param	dest_list
-	 * 			a List, the list to which the task in question
+	 * 			a TaskList, the list to which the task in question
 	 * 			is being transferred
 	 * 
 	 * @param	dest_idx
@@ -722,36 +722,36 @@ public class List
 	 * 			opting instead to simply add the task to the end of
 	 * 			<code>trans_list</code>.
 	 * 
-	 * @throws	ListException if there is no task in the
+	 * @throws	TaskListException if there is no task in the
 	 * 			original list with details equivalent to the
 	 * 			string given, or if the destination index is
 	 * 			negative or greater than the size of
 	 * 			<code>dest_list</code>.
 	 * 
-	 * @see 	{@link #transfer(Task, List, int)}
-	 * @see 	{@link #transfer(int, List, int)}
-	 * @see 	{@link #transfer(Task, List)}
-	 * @see 	{@link #transfer(int, List)}
-	 * @see 	{@link #transfer(String, List)}
+	 * @see 	{@link #transfer(Task, TaskList, int)}
+	 * @see 	{@link #transfer(int, TaskList, int)}
+	 * @see 	{@link #transfer(Task, TaskList)}
+	 * @see 	{@link #transfer(int, TaskList)}
+	 * @see 	{@link #transfer(String, TaskList)}
 	 */
 	
-	public void transfer(String task_details, List dest_list,
-			int dest_idx) throws ListException
+	public void transfer(String task_details, TaskList dest_list,
+			int dest_idx) throws TaskListException
 	{
 		if( !is_in_list(new Task(task_details)) )
 		{
-			throw new ListException("transfer(task_details, dest_list, dest_idx)",
+			throw new TaskListException("transfer(task_details, dest_list, dest_idx)",
 					"No task in list matches task details given.");
 		}
 		
 		if(dest_idx < 0)
 		{
-			throw new ListException("transfer(task_details, dest_list, dest_idx)",
+			throw new TaskListException("transfer(task_details, dest_list, dest_idx)",
 					"Destination index cannot be negative.");
 		}
 		else if(dest_idx > dest_list.get_size())
 		{
-			throw new ListException("transfer(task_details, dest_list, dest_idx)",
+			throw new TaskListException("transfer(task_details, dest_list, dest_idx)",
 					"Destination index cannot go past end of list.");
 		}
 		
@@ -771,33 +771,33 @@ public class List
 	 * 			list which is being transferred
 	 * 
 	 * @param	dest_list
-	 * 			a List, the list to which the task is being
+	 * 			a TaskList, the list to which the task is being
 	 * 			transferred
 	 * 
-	 * @throws	ListException if <code>trans_idx</code> is
+	 * @throws	TaskListException if <code>trans_idx</code> is
 	 * 			negative or past the end of the original
 	 * 			list.
 	 * 
-	 * @see 	{@link #transfer(int, List, int)}
-	 * @see 	{@link #transfer(Task, List, int)}
-	 * @see 	{@link #transfer(String, List, int)}
-	 * @see 	{@link #transfer(Task, List)}
-	 * @see 	{@link #transfer(String, List)}
+	 * @see 	{@link #transfer(int, TaskList, int)}
+	 * @see 	{@link #transfer(Task, TaskList, int)}
+	 * @see 	{@link #transfer(String, TaskList, int)}
+	 * @see 	{@link #transfer(Task, TaskList)}
+	 * @see 	{@link #transfer(String, TaskList)}
 	 */
-	public void transfer(int trans_idx, List dest_list)
-			throws ListException
+	public void transfer(int trans_idx, TaskList dest_list)
+			throws TaskListException
 	{
 		// check for errors here so error source can be more
 		// accurate and not just go to transfer(trans_idx,
 		// dest_list, dest_idx)
 		if(trans_idx < 0)
 		{
-			throw new ListException("transfer(trans_idx, dest_list)",
+			throw new TaskListException("transfer(trans_idx, dest_list)",
 					"Original index cannot be negative.");
 		}
 		if(trans_idx >= get_size())
 		{
-			throw new ListException("transfer(trans_idx, dest_list)",
+			throw new TaskListException("transfer(trans_idx, dest_list)",
 					"Original index cannot go past end of list.");
 		}
 		
@@ -816,26 +816,26 @@ public class List
 	 * @param	trans_task
 	 * 			a Task, the task being transferred.  Must be
 	 * 			contained within the original list or else a
-	 * 			ListException is thrown
+	 * 			TaskListException is thrown
 	 * 
 	 * @param	dest_list
-	 * 			a List, the destination list
+	 * 			a TaskList, the destination list
 	 * 
-	 * @throws	ListException if the task given is not in the
+	 * @throws	TaskListException if the task given is not in the
 	 * 			original list
 	 * 
-	 * @see 	{@link #transfer(Task, List, int)}
-	 * @see 	{@link #transfer(String, List, int)}
-	 * @see 	{@link #transfer(int, List, int)}
-	 * @see 	{@link #transfer(String, List)}
-	 * @see 	{@link #transfer(int, List)}
+	 * @see 	{@link #transfer(Task, TaskList, int)}
+	 * @see 	{@link #transfer(String, TaskList, int)}
+	 * @see 	{@link #transfer(int, TaskList, int)}
+	 * @see 	{@link #transfer(String, TaskList)}
+	 * @see 	{@link #transfer(int, TaskList)}
 	 */
-	public void transfer(Task trans_task, List dest_list)
-			throws ListException
+	public void transfer(Task trans_task, TaskList dest_list)
+			throws TaskListException
 	{
 		if( !is_in_list(trans_task) )
 		{
-			throw new ListException("transfer(trans_task, dest_list)",
+			throw new TaskListException("transfer(trans_task, dest_list)",
 					"Given task is not in original list.");
 		}
 		
@@ -854,7 +854,7 @@ public class List
 		}
 		else
 		{
-			throw new ListException("transfer(trans_task, dest_list)",
+			throw new TaskListException("transfer(trans_task, dest_list)",
 					"Task passed as argument has nonnull user number which is not equivalent to the user number of the task in the original list.");
 		}
 	}
@@ -870,24 +870,24 @@ public class List
 	 * 			transferred
 	 * 
 	 * @param	dest_list
-	 * 			a List, the destination list, to which the task
+	 * 			a TaskList, the destination list, to which the task
 	 * 			is being transferred and appended
 	 * 
-	 * @throws	ListException if there is no task in the original
+	 * @throws	TaskListException if there is no task in the original
 	 * 			list with details equivalent to the string passed
 	 * 
-	 * @see 	{@link #transfer(Task, List, int)}
-	 * @see 	{@link #transfer(String, List, int)}
-	 * @see 	{@link #transfer(int, List, int)}
-	 * @see 	{@link #transfer(Task, List)}
-	 * @see 	{@link #transfer(int, List)}
+	 * @see 	{@link #transfer(Task, TaskList, int)}
+	 * @see 	{@link #transfer(String, TaskList, int)}
+	 * @see 	{@link #transfer(int, TaskList, int)}
+	 * @see 	{@link #transfer(Task, TaskList)}
+	 * @see 	{@link #transfer(int, TaskList)}
 	 */
-	public void transfer(String task_details, List dest_list)
-			throws ListException
+	public void transfer(String task_details, TaskList dest_list)
+			throws TaskListException
 	{
 		if( !is_in_list(new Task(task_details)) )
 		{
-			throw new ListException("transfer(task_details, dest_list)",
+			throw new TaskListException("transfer(task_details, dest_list)",
 					"No task in list matches task details given.");
 		}
 		
@@ -915,10 +915,10 @@ public class List
 
 
 
-	public static void main(String[] args) throws ListException
+	public static void main(String[] args) throws TaskListException
 	{
 		// just a visual test of the toString() method
-		List l0 = new List("Test list");
+		TaskList l0 = new TaskList("Test list");
 		l0.append(new Task("Finish tasklist project"));
 		l0.append(new Task("Get funding"));
 		l0.append(new Task("Profit"));

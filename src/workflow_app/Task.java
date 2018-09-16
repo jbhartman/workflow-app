@@ -9,7 +9,7 @@ package workflow_app;
  * 
  * @author 		Jacob Hartman (jabrhartman@gmail.com)
  * @version 	Pre-alpha
- * @see also	List
+ * @see also	TaskList
  */
 public class Task
 {
@@ -191,25 +191,26 @@ public class Task
 	/**
 	 * Change details of the task </br>
 	 * 
-	 * <b>Note</b>: As tasks will nearly always be used in lists, it
-	 * is important to note that we are not concerned with exceptions
-	 * being raised for changing the details to being equivalent to
-	 * that of another task here.  That is handled within the List
-	 * class by the methods listed in the "see also" section below.
+	 * <b>Note</b>: As tasks will nearly always be used in TaskLists,
+	 * it is important to note that we are not concerned with
+	 * exceptions being raised for changing the details to being
+	 * equivalent to that of another task here.  That is handled
+	 * within the TaskList class by the methods listed in the "see
+	 * also" section below.
 	 * 
 	 * @param 	new_details
 	 * 			a String, the new details of the task which replace
 	 * 			the previously held details
 	 * 
-	 * @see		{@link List#append(Task)}
-	 * @see		{@link List#insert(int, Task)}
-	 * @see		{@link List#replace(int, Task)}
-	 * @see		{@link List#transfer(int, List)}
-	 * @see		{@link List#transfer(String, List)}
-	 * @see		{@link List#transfer(Task, List)}
-	 * @see		{@link List#transfer(int, List, int)}
-	 * @see		{@link List#transfer(String, List, int)}
-	 * @see		{@link List#transfer(Task, List, int)}
+	 * @see		{@link TaskList#append(Task)}
+	 * @see		{@link TaskList#insert(int, Task)}
+	 * @see		{@link TaskList#replace(int, Task)}
+	 * @see		{@link TaskList#transfer(int, TaskList)}
+	 * @see		{@link TaskList#transfer(String, TaskList)}
+	 * @see		{@link TaskList#transfer(Task, TaskList)}
+	 * @see		{@link TaskList#transfer(int, TaskList, int)}
+	 * @see		{@link TaskList#transfer(String, TaskList, int)}
+	 * @see		{@link TaskList#transfer(Task, TaskList, int)}
 	 */
 	public void set_details(String new_details) { my_details = new_details; }
 	
